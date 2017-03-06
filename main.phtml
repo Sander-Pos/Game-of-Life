@@ -1,12 +1,21 @@
 <!DOCTYPE html>
 <html>
-<head>
 
-<link rel="stylesheet" href="style.css" type="text/css">
+<head>
+	<title>Javascrip Game of Life</title>
+	<link rel="stylesheet" href="style.css" type="text/css">
+	<link rel="icon" href="GoL.gif">
+
 </head>
+<body>
+
 <p id="notifier">notifications go here</p>
-<canvas id="DrawArea" width="600" height="400"></canvas>
+<div class="border" id="canvasArea">
+	<canvas id="DrawArea" width="600" height="400"></canvas>
+</div>
+
 <br>
+<div class="border" id="buttonArea">
 <button type="button" onclick="toggleAction()">pause/play</button>
 
 <button type="button" onclick="clearGrids()">reset grid</button>
@@ -16,9 +25,13 @@
 <button type="button" onclick="saveGrid()">convert</button>
 
 <button type="button" onclick="loadGrid()">load</button>
+</div>
 <br>
+<div class="border" id="loadArea">
 <textarea id="display" rows="30" cols="90"></textarea>
+</div>
 
 <br>
+</body>
 
 <script type ="text/javascript" src="game-of-life.js"></script>
