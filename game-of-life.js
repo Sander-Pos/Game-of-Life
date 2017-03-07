@@ -39,9 +39,9 @@ function drawGrid() {
 	canvasCtx.fillRect(0,0,canvasWidth,canvasHeight);
 
 	canvasCtx.beginPath();
-
-	for(var x=0;x<60;x++) {
-		for(var y=0;y<40;y++) {
+	var x, y;
+	for(x=0;x<60;x++) {
+		for(y=0;y<40;y++) {
 			 if(conwayGrid[x][y] == 1) {
 				canvasCtx.rect(x*10,y*10,9,9);
 			}
@@ -80,21 +80,23 @@ function step() {
 }
 function gameOfLife() {
 
-	var i = 1, j = 1;
+	var i, j, x, y;
+	var counter = 0;
 	for(i=1;i<59;i++) {
 		for(j=1;j<39;j++) {
 			counter = 0;
 			for(x=-1;x<=1;x++) {
 				for(y=-1;y<=1;y++) {
+					//console.log(i+x);
 					if(x == 0 && y == 0) {
 						continue;
-					}
-					if(conwayGrid[i+x][j+y] == 1) {
+					} else if(conwayGrid[(i+x)][(j+y)] == 1) {
 						counter++;
 					}
+					
 				}
 			}
-
+			
 			if(counter == 3) {
 				tempGrid[i][j] = 1;
 			//	console.log("birth at: "+i+", "+j);
@@ -110,18 +112,27 @@ function gameOfLife() {
 				//console.log("death at: "+i+", "+j);
 				}
 			}
-			counter = 0;
+			/*
+			if( counter == 1 ||
+				counter == 3 || 
+				counter == 5 ||
+				counter == 7 ) {
+				tempGrid[i][j] = 1;
+			} else { 
+				tempGrid[i][j] = 0;
+			} */
+
 		}
 	}
-	i=0;
-	j=0;
+
 	conwayGrid = tempGrid.slice();
 }
 function drawSeed() {
 	canvasCtx.fillStyle = "#aaaaff";
 	canvasCtx.fillRect(0,0,canvasWidth,canvasHeight);
-	for(var x=0;x<60;x++) {
-		for(var y=0;y<40;y++) {
+	var x, y;
+	for(x=0;x<60;x++) {
+		for(y=0;y<40;y++) {
 			if(conwayGrid[x][y] == 1) {
 			canvasCtx.fillStyle = "#ff0000";
 			canvasCtx.fillRect(x*10,y*10,9,9);
@@ -143,17 +154,19 @@ function toggleGrid(posX, posY) {
 }
 
 function generateTempGrid() {
-	for(var i=0;i<60;i++) {
+	var i, j;
+	for(i=0;i<60;i++) {
 		tempGrid[i] = [];
-		for(var j=0;j<40;j++) {
+		for(j=0;j<40;j++) {
 			tempGrid[i][j] = 0;
 		}
 	}
 }
 function generateGrid() {
-	for(var i=0;i<60;i++) {
+	var i, j;
+	for(i=0;i<60;i++) {
 		conwayGrid[i] = [];
-		for(var j=0;j<40;j++) {
+		for(j=0;j<40;j++) {
 			conwayGrid[i][j] = 0;
 
 		}
