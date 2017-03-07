@@ -1,4 +1,3 @@
-
 var mainCanvas = document.getElementById("DrawArea");
 var canvasCtx = mainCanvas.getContext("2d");
 
@@ -14,26 +13,34 @@ generateGrid();
 var tempGrid = [[],[]];
 generateTempGrid();
 init();
+
 var notes = document.getElementById("notifier");
 var displayArea = document.getElementById("display");
 
 notes.innerHTML = "welcome to the JavaScript Game of Life simulator";
+
 function init() {
+// function that cleans the visual canvas.
 	canvasCtx.fillStyle = "#FFFFFF";
 	canvasCtx.fillRect(0,0,canvasWidth,canvasHeight);
 }
 function locate(mainCanvas,evt) {
+// function to find the coordinates of the mouse on the canvas
+// and convert it to a grid location.
 	var rect = mainCanvas.getBoundingClientRect();
 	return {
 		a: Math.floor((evt.clientX-rect.left)/(rect.right-rect.left)*canvasWidth/10),
 		b: Math.floor((evt.clientY-rect.top)/(rect.bottom-rect.top)*canvasHeight/10)
 	};
 }
+
 var requestAnimationFrame = window.requestAnimationFrame ||
 							window.mozRequestAnimationFrame ||
                             window.webkitRequestAnimationFrame || 
                             window.msRequestAnimationFrame;
+
 function drawGrid() {
+// main loop to draw on the HTML canvas element.
 	canvasCtx.clearRect(0,0,canvasWidth,canvasHeight);
 	canvasCtx.fillStyle = "#ffffff";
 	canvasCtx.fillRect(0,0,canvasWidth,canvasHeight);
@@ -63,6 +70,7 @@ function drawGrid() {
 	}
 }
 function toggleAction() {
+// function to pause or play the simulation
 	if(toggle == 1) {
 		toggle = 0;
 		notes.innerHTML = "paused";
@@ -73,18 +81,19 @@ function toggleAction() {
 	}
 }
 function step() {
+// function to advance the simulation one single generation
 	gameOfLife();
 	drawGrid();
 //	console.log(conwayGrid);
 	generateTempGrid();
 }
 function gameOfLife() {
-
+// main function for the simulation, following Conway's rules.
 	var i, j, x, y;
-	var counter = 0;
+
 	for(i=1;i<59;i++) {
 		for(j=1;j<39;j++) {
-			counter = 0;
+			var counter = 0;
 			for(x=-1;x<=1;x++) {
 				for(y=-1;y<=1;y++) {
 					//console.log(i+x);
@@ -128,6 +137,7 @@ function gameOfLife() {
 	conwayGrid = tempGrid.slice();
 }
 function drawSeed() {
+// function to actively draw the grid when a square is clicked
 	canvasCtx.fillStyle = "#aaaaff";
 	canvasCtx.fillRect(0,0,canvasWidth,canvasHeight);
 	var x, y;
@@ -145,6 +155,7 @@ function drawSeed() {
 }
 
 function toggleGrid(posX, posY) {
+// set a cell to active or dead when the user clicks on it
 	if(conwayGrid[posX][posY] != 1) {
 		conwayGrid[posX][posY] = 1;
 		notes.innerHTML = "set to false at"+posX+", "+posY;
@@ -153,7 +164,9 @@ function toggleGrid(posX, posY) {
 	}
 }
 
+// two of the functions below should be merged into a single one.
 function generateTempGrid() {
+// function to generate an empty grid to avoid 'undefined' typeErrors
 	var i, j;
 	for(i=0;i<60;i++) {
 		tempGrid[i] = [];
@@ -162,17 +175,21 @@ function generateTempGrid() {
 		}
 	}
 }
+
 function generateGrid() {
+// function to generate an empty grid to avoid 'undefined' typeErrors
 	var i, j;
 	for(i=0;i<60;i++) {
 		conwayGrid[i] = [];
 		for(j=0;j<40;j++) {
 			conwayGrid[i][j] = 0;
-
 		}
 	}
 }
+
 function clearGrids() {
+// clears the canvas and the active grids, the grid that's being displayed
+// and the temporary grid
 	canvasCtx.fillStyle = "#ffffff";
 	canvasCtx.fillRect(0,0,canvasWidth,canvasHeight);
 	generateGrid();
@@ -180,18 +197,24 @@ function clearGrids() {
 //	console.log(conwayGrid);
 	drawSeed();
 }
+
 function saveGrid() {
+//function to convert the active grid to JSON string
 	var jsonArray = JSON.stringify(conwayGrid);
 	//console.log(jsonArray);
 	displayArea.value = jsonArray;
 }
+
 function loadGrid() {
+// function to load the data from the HTML textarea !!has no filtering yet!!
 	var txt = document.getElementById("display").value;
 	conwayGrid = JSON.parse(txt);
 	drawSeed();
 }
-mainCanvas.addEventListener('click', function(evt) {
 
+mainCanvas.addEventListener('click', function(evt) {
+// function to find the location of the mouse on the grid and draw when the grid
+// is being clicked
 	var mousePos = locate(mainCanvas,evt);
 	toggleGrid(mousePos.a,mousePos.b);
 	var noteMessage = "coordinates are: "+mousePos.a+", "+mousePos.b;
